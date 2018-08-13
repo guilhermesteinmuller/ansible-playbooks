@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  vars_prompt:
+    - name: "net_name"
+      prompt: "Name your tenant network"
+      default: "tenant_net"
+      private: no
+    - name: "cidr"
+      prompt: "Define your cidr"
+      default: "192.168.1.0/24"
+      private: no
+    - name: "router"
+      prompt: "Name your router"
+      default: "tenant_router"
+      private: no
+
+  tasks:
+  - name: "Create {{ net_name }} netwotk"
+    os_network:
+      name: "{{ net_name }}"
+
+  - name: "Create {{ net_name }}-subnet sub-network"
+    os_subnet:
+      name: "{{ net_name }}-subnet"
+      network_name: "{{ net_name }}"
+      cidr: "{{ cidr }}"
+# TODO: verify the issue with network.policy for operations using openstacksdk
+#  - name: "Create {{ router }}"
+#    os_router: 
+#      state: present
+#      name: "{{ router }}"
+#      network: public
+#      external_fixed_ips:
+#        - subnet: range-1
+#      interfaces:
+#        - net: "{{ net_name }}" 
+#          subnet: "{{ net_name }}-subnet"
+
+
+         
+
